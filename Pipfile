@@ -8,6 +8,8 @@ django = "*"
 djangorestframework = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+django-allauth = {extras = ["socialaccount"], version = "*"}
 
 [dev-packages]
 
