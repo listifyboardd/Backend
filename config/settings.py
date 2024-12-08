@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'phonenumber_field',
 
     'src.apps.users.apps.UsersConfig',
+
+    'posts',
+    'cities_light'
 ]
 
 MIDDLEWARE = [
