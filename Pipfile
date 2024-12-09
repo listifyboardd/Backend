@@ -12,6 +12,7 @@ django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
 django-allauth = {extras = ["socialaccount"], version = "*"}
 djangorestframework-simplejwt = "*"
 dj-rest-auth = {extras = ["with_social"], version = "*"}
+django-cities-light = "*"
 
 [dev-packages]
 

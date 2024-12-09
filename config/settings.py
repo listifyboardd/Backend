@@ -51,11 +51,10 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'phonenumber_field',
+    'cities_light',
 
     'src.apps.users.apps.UsersConfig',
-
-    'posts',
-    'cities_light'
+    'src.apps.posts.apps.PostsConfig',
 ]
 
 MIDDLEWARE = [
