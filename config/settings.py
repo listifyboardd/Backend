@@ -210,6 +210,7 @@ REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'src.apps.users.serializers.CustomUserDetailsSerializer',
 
     'USE_JWT': True,
+    'JWT_AUTH_HTTPONLY': False,
     'JWT_AUTH_COOKIE': 'access-token',
     'JWT_AUTH_REFRESH_COOKIE': 'refresh-token',
 }
