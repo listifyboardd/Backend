@@ -3,8 +3,6 @@ from dj_rest_auth.jwt_auth import get_refresh_view
 from dj_rest_auth.registration.views import RegisterView, VerifyEmailView, ResendEmailVerificationView
 from dj_rest_auth.views import LoginView, LogoutView, UserDetailsView, PasswordResetView, PasswordResetConfirmView
 from django.urls import path
-import dj_rest_auth.urls
-from rest_framework_simplejwt.views import TokenVerifyView
 from src.apps.users.views import email_confirm_redirect, password_reset_confirm_redirect, GoogleLogin
 
 urlpatterns = [
@@ -21,7 +19,6 @@ urlpatterns = [
     path("password/reset/", PasswordResetView.as_view(), name="rest_password_reset"),
     path("password/reset/confirm/<str:uidb64>/<str:token>/", password_reset_confirm_redirect, name="password_reset_confirm"),
     path("password/reset/confirm/", PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
-    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
 ]
 
