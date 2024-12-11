@@ -26,7 +26,7 @@ class ImagesSerializer(serializers.ModelSerializer):
 class HousingPostSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=HousingPostCategory.objects.all())
     main_image = serializers.ImageField(use_url=True)
-    other_images = ImagesSerializer(many=True, read_only=True)
+    other_images = ImagesSerializer(many=True)
     class Meta:
         model = HousingPost
         fields = '__all__'
