@@ -15,6 +15,7 @@ dj-rest-auth = {extras = ["with_social"], version = "*"}
 django-cities-light = "*"
 gunicorn = "*"
 django-cors-headers = "*"
+pillow = "*"
 
 [dev-packages]
 

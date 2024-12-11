@@ -12,12 +12,13 @@ class JobPostCategory(models.Model):
 class JobPost(models.Model):
     title = models.CharField(max_length=255, verbose_name='Title')
     description = models.TextField(verbose_name='Description')
-    publication_date = models.DateTimeField(auto_now_add=True)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE, verbose_name='Region')
-    salary = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Salary')
-    days_per_week = models.PositiveIntegerField(verbose_name='Number days')
-    hours_per_day = models.CharField(max_length=20, verbose_name='Daily hours')
+    company_name = models.CharField(max_length=255, verbose_name='Company name')
+    location = models.ForeignKey(Region, on_delete=models.CASCADE, verbose_name='Region')
+    salary = models.CharField(max_length=255, verbose_name='Salary')
+    type = models.CharField(max_length=10, choices=[('full_time', 'Full Time'), ('part_time', 'Part Time')], verbose_name='Type')
     category = models.ForeignKey(JobPostCategory, on_delete=models.CASCADE, verbose_name='Category')
+    publication_date = models.DateTimeField(auto_now_add=True)
+    is_draft = models.BooleanField(default=False, verbose_name='Is draft')
 
     def __str__(self):
         return self.title
@@ -30,8 +31,8 @@ class HousingPostCategory(models.Model):
         return self.name
 
 
-class Image(models.Model):
-    image = models.ImageField(upload_to='housing_posts/other_images/', blank=True, verbose_name='Image')
+class HousingPostImageGallery(models.Model):
+    image = models.ImageField(upload_to='housing_posts/gallery/', blank=True, verbose_name='Image')
 
     def __str__(self):
         return f"Image {self.id}"
@@ -43,14 +44,13 @@ class HousingPost(models.Model):
         ('super_vip', 'Super VIP'),
         ('premium', 'Premium'),
     ]
-    main_image = models.ImageField(upload_to='housing_posts/main_images/', verbose_name='Main image')
     title = models.CharField(max_length=255, verbose_name='Title')
-    location = models.CharField(max_length=255, verbose_name='Location')
+    short_description = models.TextField(verbose_name='Short description', max_length=2000)
+    main_image = models.ImageField(upload_to='housing_posts/main_images/', verbose_name='Main image')
+    location = models.ForeignKey(Region, on_delete=models.CASCADE, verbose_name='Region')
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, verbose_name='Type')
-    short_description = models.TextField(verbose_name='Short description')
-    other_images = models.ManyToManyField(Image, related_name='housing_posts', verbose_name='Other images')
-    living_conditions = models.TextField(verbose_name='Living conditions')
-    category = models.ForeignKey(HousingPostCategory, on_delete=models.CASCADE, verbose_name='Category')
+    category = models.ForeignKey(HousingPostCategory, on_delete=models.PROTECT, verbose_name='Category')
+    is_draft = models.BooleanField(default=False, verbose_name='Is draft')
 
     def __str__(self):
         return self.title

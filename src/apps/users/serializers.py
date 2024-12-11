@@ -14,6 +14,7 @@ class CustomLoginSerializer(LoginSerializer):
 
 class CustomRegisterSerializer(RegisterSerializer):
     username = None
+    first_name = serializers.CharField(required=True, max_length=150)
 
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
@@ -23,6 +24,11 @@ class CustomRegisterSerializer(RegisterSerializer):
                     _('A user is already registered with this e-mail address.'),
                 )
         return email
+
+    def get_cleaned_data(self):
+        cleaned_data = super().get_cleaned_data()
+        cleaned_data['first_name'] = self.validated_data.get('first_name', '')
+        return cleaned_data
 
 
 class CustomUserDetailsSerializer(UserDetailsSerializer):

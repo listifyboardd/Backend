@@ -16,25 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from src.apps.posts.views import JobPostViewSet, JobPostCategoryViewSet, ImageViewSet, HousingPostViewSet
+
 
 from django.conf import settings
 from django.conf.urls.static import static
 
-router = DefaultRouter()
-router.register(r'jobpostcategory', JobPostCategoryViewSet, basename='jobpostcategory')
-router.register(r'jobposts', JobPostViewSet, basename='jobpost')
-router.register(r'image', ImageViewSet, basename='image')
-router.register(r'housingpostcategory', HousingPostViewSet, basename='housingpostcategory')
-router.register(r'housingposts', HousingPostViewSet, basename='housingpost')
-
 urlpatterns = [
     path('api/admin/', admin.site.urls),
     path('api/users/', include('src.apps.users.urls')),
-    # path('users/social/', include('allauth.urls')),
-    # path('users/social/', include('allauth.socialaccount.urls')),
-    path('api/posts/', include(router.urls)),
+    path('api/posts/', include('src.apps.posts.urls')),
 ]
 
 if settings.DEBUG:
