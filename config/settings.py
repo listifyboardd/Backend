@@ -16,7 +16,7 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv('.env.dev'))
-load_dotenv(find_dotenv('.env'))
+load_dotenv(find_dotenv('.env'), override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -147,6 +147,9 @@ STATIC_ROOT = 'src/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+SITE_URL = os.getenv('SITE_URL')
+DEVELOPMENT_SITE_URL = os.getenv('DEVELOPMENT_SITE_URL')
+
 # drf settings
 
 REST_FRAMEWORK = {
@@ -180,8 +183,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-EMAIL_CONFIRM_REDIRECT_BASE_URL = "http://localhost:3000/email/confirm/"
-PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = "http://localhost:3000/password-reset/confirm/"
+EMAIL_CONFIRM_REDIRECT_BASE_URL = f"{SITE_URL}/email/confirm/"
+PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = f"{SITE_URL}/password-reset/confirm/"
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 # ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/?verification=1'
@@ -219,7 +222,8 @@ REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'access-token',
     'JWT_AUTH_REFRESH_COOKIE': 'refresh-token',
-    'JWT_AUTH_SAMESITE': 'None',
+    'JWT_AUTH_SAMESITE': 'None',  # for testing
+    'JWT_AUTH_SECURE': True,  # for testing
     'JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED': True,
 }
 
@@ -243,11 +247,14 @@ SIMPLE_JWT = {
 # django-cors-header settings
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://listifyboard.com",
+    SITE_URL,
+    DEVELOPMENT_SITE_URL,  # for testing
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "https://listifyboard.com",
+    SITE_URL,
+    DEVELOPMENT_SITE_URL,  # for testing
 ]
+
+
+
