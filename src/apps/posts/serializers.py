@@ -18,11 +18,6 @@ class HousingPostCategorySerializer(serializers.ModelSerializer):
         model = HousingPostCategory
         fields = '__all__'
 
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = '__all__'
-
 class HousingPostSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=HousingPostCategory.objects.all())
     class Meta:
