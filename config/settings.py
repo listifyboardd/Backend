@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'phonenumber_field',
     'cities_light',
+    'corsheaders',
 
     'src.apps.users.apps.UsersConfig',
     'src.apps.posts.apps.PostsConfig',
@@ -67,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -138,6 +140,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'src/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -235,3 +238,15 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
 }
+
+# django-cors-header settings
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://listifyboard.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "https://listifyboard.com",
+]
