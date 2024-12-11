@@ -13,6 +13,7 @@ django-allauth = {extras = ["socialaccount"], version = "*"}
 djangorestframework-simplejwt = "*"
 dj-rest-auth = {extras = ["with_social"], version = "*"}
 django-cities-light = "*"
+gunicorn = "*"
 
 [dev-packages]
 
