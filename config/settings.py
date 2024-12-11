@@ -16,7 +16,7 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv('.env.dev'))
-load_dotenv(find_dotenv('.env'))
+load_dotenv(find_dotenv('.env'), override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'phonenumber_field',
     'cities_light',
+    'corsheaders',
 
     'src.apps.users.apps.UsersConfig',
     'src.apps.posts.apps.PostsConfig',
@@ -67,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -138,11 +140,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'src/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SITE_URL = os.getenv('SITE_URL')
+DEVELOPMENT_SITE_URL = os.getenv('DEVELOPMENT_SITE_URL')
 
 # drf settings
 
@@ -159,6 +168,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ]
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 15,
 }
 
 
@@ -177,8 +188,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-EMAIL_CONFIRM_REDIRECT_BASE_URL = "http://localhost:3000/email/confirm/"
-PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = "http://localhost:3000/password-reset/confirm/"
+EMAIL_CONFIRM_REDIRECT_BASE_URL = f"{SITE_URL}/email/confirm/"
+PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = f"{SITE_URL}/password-reset/confirm/"
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 # ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/?verification=1'
@@ -216,6 +227,9 @@ REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'access-token',
     'JWT_AUTH_REFRESH_COOKIE': 'refresh-token',
+    'JWT_AUTH_SAMESITE': 'None',  # for testing
+    'JWT_AUTH_SECURE': True,  # for testing
+    'JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED': True,
 }
 
 # smtp settings
@@ -230,14 +244,19 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 # djangorestframework-simplejwt settings
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# django-cors-header settings
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 15,
-}
+CORS_ALLOWED_ORIGINS = [
+    SITE_URL,
+    DEVELOPMENT_SITE_URL,  # for testing
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    SITE_URL,
+    DEVELOPMENT_SITE_URL,  # for testing
+]

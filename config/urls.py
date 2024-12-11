@@ -30,8 +30,8 @@ router.register(r'housingpostcategory', HousingPostViewSet, basename='housingpos
 router.register(r'housingposts', HousingPostViewSet, basename='housingpost')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('users/', include('src.apps.users.urls')),
+    path('api/admin/', admin.site.urls),
+    path('api/users/', include('src.apps.users.urls')),
     # path('users/social/', include('allauth.urls')),
     # path('users/social/', include('allauth.socialaccount.urls')),
     path('api/posts/', include(router.urls)),

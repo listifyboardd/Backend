@@ -1,16 +1,19 @@
 from allauth.socialaccount.views import signup
 from dj_rest_auth.jwt_auth import get_refresh_view
-from dj_rest_auth.registration.views import RegisterView, VerifyEmailView, ResendEmailVerificationView
+from dj_rest_auth.registration.views import VerifyEmailView, ResendEmailVerificationView
 from dj_rest_auth.views import LoginView, LogoutView, UserDetailsView, PasswordResetView, PasswordResetConfirmView
 from django.urls import path
-import dj_rest_auth.urls
-from rest_framework_simplejwt.views import TokenVerifyView
-from src.apps.users.views import email_confirm_redirect, password_reset_confirm_redirect, GoogleLogin
+from src.apps.users.views import (
+    email_confirm_redirect,
+    password_reset_confirm_redirect,
+    GoogleLogin,
+    CustomRegisterView
+)
 
 urlpatterns = [
     path("social/signup/", signup, name="socialaccount_signup"),
     path("social/google/login", GoogleLogin.as_view(), name="google_login"),
-    path("register/", RegisterView.as_view(), name="rest_register"),
+    path("register/", CustomRegisterView.as_view(), name="rest_register"),
     path("login/", LoginView.as_view(), name="rest_login"),
     path("logout/", LogoutView.as_view(), name="rest_logout"),
     path("user/", UserDetailsView.as_view(), name="rest_user_details"),
@@ -21,7 +24,6 @@ urlpatterns = [
     path("password/reset/", PasswordResetView.as_view(), name="rest_password_reset"),
     path("password/reset/confirm/<str:uidb64>/<str:token>/", password_reset_confirm_redirect, name="password_reset_confirm"),
     path("password/reset/confirm/", PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
-    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
 ]
 
