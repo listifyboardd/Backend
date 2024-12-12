@@ -1,5 +1,6 @@
 from django.db import models
 from cities_light.models import Region
+from src.apps.users.models import CustomUser
 
 
 class JobPostCategory(models.Model):
@@ -19,6 +20,7 @@ class JobPost(models.Model):
     category = models.ForeignKey(JobPostCategory, on_delete=models.CASCADE, verbose_name='Category')
     publication_date = models.DateTimeField(auto_now_add=True)
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='job_posts', verbose_name='Author')
 
     def __str__(self):
         return self.title
@@ -47,6 +49,7 @@ class HousingPost(models.Model):
     type = models.CharField(max_length=255, choices=[('for_rent', 'For rent'), ('for_business', 'For business')], verbose_name='Type')
     category = models.ForeignKey(HousingPostCategory, on_delete=models.PROTECT, verbose_name='Category')
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='housing_posts', verbose_name='Author')
 
     def __str__(self):
         return self.title
