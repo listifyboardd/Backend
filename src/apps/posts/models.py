@@ -1,9 +1,11 @@
+from autoslug import AutoSlugField
 from django.db import models
 from cities_light.models import Region
 
 
 class JobPostCategory(models.Model):
     name = models.CharField(max_length=255, verbose_name='Name')
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self):
         return self.name
@@ -19,6 +21,7 @@ class JobPost(models.Model):
     category = models.ForeignKey(JobPostCategory, on_delete=models.CASCADE, verbose_name='Category')
     publication_date = models.DateTimeField(auto_now_add=True)
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self):
         return self.title
@@ -26,6 +29,7 @@ class JobPost(models.Model):
 
 class HousingPostCategory(models.Model):
     name = models.CharField(max_length=255, verbose_name='Name')
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self):
         return self.name
@@ -47,6 +51,7 @@ class HousingPost(models.Model):
     type = models.CharField(max_length=255, choices=[('for_rent', 'For rent'), ('for_business', 'For business')], verbose_name='Type')
     category = models.ForeignKey(HousingPostCategory, on_delete=models.PROTECT, verbose_name='Category')
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self):
         return self.title
