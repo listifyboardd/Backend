@@ -1,3 +1,4 @@
+from autoslug import AutoSlugField
 from django.db import models
 from cities_light.models import Region
 from src.apps.users.models import CustomUser
@@ -5,6 +6,7 @@ from src.apps.users.models import CustomUser
 
 class JobPostCategory(models.Model):
     name = models.CharField(max_length=255, verbose_name='Name')
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self):
         return self.name
@@ -21,6 +23,7 @@ class JobPost(models.Model):
     publication_date = models.DateTimeField(auto_now_add=True)
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='job_posts', verbose_name='Author')
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self):
         return self.title
@@ -28,6 +31,7 @@ class JobPost(models.Model):
 
 class HousingPostCategory(models.Model):
     name = models.CharField(max_length=255, verbose_name='Name')
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self):
         return self.name
@@ -50,6 +54,7 @@ class HousingPost(models.Model):
     category = models.ForeignKey(HousingPostCategory, on_delete=models.PROTECT, verbose_name='Category')
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='housing_posts', verbose_name='Author')
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self):
         return self.title
