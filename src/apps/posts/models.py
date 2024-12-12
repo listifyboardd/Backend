@@ -33,22 +33,18 @@ class HousingPostCategory(models.Model):
 
 class HousingPostImageGallery(models.Model):
     image = models.ImageField(upload_to='housing_posts/gallery/', blank=True, verbose_name='Image')
+    housing_post = models.ForeignKey('HousingPost', on_delete=models.CASCADE, verbose_name='Housing Post')
 
     def __str__(self):
         return f"Image {self.id}"
 
 
 class HousingPost(models.Model):
-    TYPE_CHOICES = [
-        ('vip', 'VIP'),
-        ('super_vip', 'Super VIP'),
-        ('premium', 'Premium'),
-    ]
     title = models.CharField(max_length=255, verbose_name='Title')
     short_description = models.TextField(verbose_name='Short description', max_length=2000)
     main_image = models.ImageField(upload_to='housing_posts/main_images/', verbose_name='Main image')
     location = models.ForeignKey(Region, on_delete=models.CASCADE, verbose_name='Region')
-    type = models.CharField(max_length=10, choices=TYPE_CHOICES, verbose_name='Type')
+    type = models.CharField(max_length=255, choices=[('for_rent', 'For rent'), ('for_business', 'For business')], verbose_name='Type')
     category = models.ForeignKey(HousingPostCategory, on_delete=models.PROTECT, verbose_name='Category')
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
 

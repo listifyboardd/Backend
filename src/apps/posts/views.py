@@ -23,3 +23,4 @@ class HousingPostViewRead(viewsets.ReadOnlyModelViewSet):
 class HousingPostCategoryViewRead(viewsets.ReadOnlyModelViewSet):
     queryset = HousingPostCategory.objects.all()
     serializer_class = HousingPostCategorySerializer
+
