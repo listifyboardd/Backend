@@ -6,7 +6,7 @@ from src.apps.users.models import CustomUser
 
 class JobPostCategory(models.Model):
     name = models.CharField(max_length=255, verbose_name='Name')
-    slug = AutoSlugField(populate_from='title', unique=True)
+    slug = AutoSlugField(populate_from='name', unique=True)
 
     def __str__(self):
         return self.name
@@ -31,7 +31,7 @@ class JobPost(models.Model):
 
 class HousingPostCategory(models.Model):
     name = models.CharField(max_length=255, verbose_name='Name')
-    slug = AutoSlugField(populate_from='title', unique=True)
+    slug = AutoSlugField(populate_from='name', unique=True)
 
     def __str__(self):
         return self.name
