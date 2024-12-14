@@ -28,6 +28,9 @@ class JobPost(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ['-publication_date']
+
 
 class HousingPostCategory(models.Model):
     name = models.CharField(max_length=255, verbose_name='Name')
@@ -51,6 +54,7 @@ class HousingPost(models.Model):
     main_image = models.ImageField(upload_to='housing_posts/main_images/', verbose_name='Main image')
     location = models.ForeignKey(Region, on_delete=models.CASCADE, verbose_name='Region')
     type = models.CharField(max_length=255, choices=[('for_rent', 'For rent'), ('for_business', 'For business')], verbose_name='Type')
+    publication_date = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(HousingPostCategory, on_delete=models.PROTECT, verbose_name='Category')
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='housing_posts', verbose_name='Author')
@@ -58,3 +62,6 @@ class HousingPost(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ['-publication_date']
