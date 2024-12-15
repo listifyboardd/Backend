@@ -2,6 +2,7 @@ from autoslug import AutoSlugField
 from django.db import models
 from cities_light.models import Region
 from src.apps.users.models import CustomUser
+from django.utils.text import slugify
 
 
 class JobPostCategory(models.Model):
@@ -24,6 +25,11 @@ class JobPost(models.Model):
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='job_posts', verbose_name='Author')
     slug = AutoSlugField(populate_from='title', unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug or self.slug != slugify(self.title):
+            self.slug = slugify(self.title)
+        super(JobPost, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -55,6 +61,11 @@ class HousingPost(models.Model):
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='housing_posts', verbose_name='Author')
     slug = AutoSlugField(populate_from='title', unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug or self.slug != slugify(self.title):
+            self.slug = slugify(self.title)
+        super(JobPost, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title

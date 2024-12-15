@@ -7,6 +7,7 @@ class JobPostSerializer(serializers.ModelSerializer):
     location_name = serializers.CharField(source='location.display_name', read_only=True, required=False)
     type_display = serializers.CharField(source='get_type_display', read_only=True)
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    is_draft = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = JobPost
@@ -32,6 +33,7 @@ class HousingPostSerializer(serializers.ModelSerializer):
     location_name = serializers.CharField(source='location.display_name', read_only=True, required=False)
     type_display = serializers.CharField(source='get_type_display', read_only=True)
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    is_draft = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = HousingPost
