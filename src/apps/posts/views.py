@@ -2,8 +2,12 @@ from cities_light.models import Country, Region
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.generics import RetrieveAPIView
 from .models import JobPostCategory, JobPost, HousingPostCategory, HousingPost
+<<<<<<< HEAD
+from .serializers import JobPostCategorySerializer, JobPostSerializer, HousingPostCategorySerializer, HousingPostSerializer
+from .permissions import IsOwner
+=======
 from .serializers import (
     JobPostCategorySerializer,
     JobPostSerializer,
@@ -12,6 +16,7 @@ from .serializers import (
     LocationCountrySerializer,
     LocationRegionSerializer, PostSerializer
 )
+>>>>>>> 2fc7f24d535e507477aac04f93e488c40f13371a
 
 
 class UserJobPostsListView(generics.ListAPIView):
@@ -36,7 +41,17 @@ class JobPostViewRead(viewsets.ReadOnlyModelViewSet):
     serializer_class = JobPostSerializer
 
 
+<<<<<<< HEAD
+class JobPostDetailView(RetrieveAPIView):
+    queryset = JobPost.objects.all()
+    serializer_class = JobPostSerializer
+    lookup_field = 'slug'
+
+
+class JobPostCategoryViewRead(viewsets.ReadOnlyModelViewSet):
+=======
 class JobPostCategoryViewList(generics.ListAPIView):
+>>>>>>> 2fc7f24d535e507477aac04f93e488c40f13371a
     queryset = JobPostCategory.objects.all()
     serializer_class = JobPostCategorySerializer
 
@@ -47,7 +62,17 @@ class HousingPostViewRead(viewsets.ReadOnlyModelViewSet):
     serializer_class = HousingPostSerializer
 
 
+<<<<<<< HEAD
+class HousingPostDetailView(RetrieveAPIView):
+    queryset = JobPost.objects.all()
+    serializer_class = HousingPostSerializer
+    lookup_field = 'slug'
+
+
+class HousingPostCategoryViewRead(viewsets.ReadOnlyModelViewSet):
+=======
 class HousingPostCategoryViewList(generics.ListAPIView):
+>>>>>>> 2fc7f24d535e507477aac04f93e488c40f13371a
     queryset = HousingPostCategory.objects.all()
     serializer_class = HousingPostCategorySerializer
 
@@ -71,44 +96,43 @@ class HousingPostCreateView(generics.CreateAPIView):
 class JobPostUpdateView(generics.UpdateAPIView):
     queryset = JobPost.objects.all()
     serializer_class = JobPostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
+    lookup_field = 'slug'
 
     def perform_update(self, serializer):
-        post = self.get_object()
-        if post.author != self.request.user:
-            raise PermissionDenied("You can only update your own posts.")
         serializer.save()
 
 
 class HousingPostUpdateView(generics.UpdateAPIView):
     queryset = HousingPost.objects.all()
     serializer_class = HousingPostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
+    lookup_field = 'slug'
 
     def perform_update(self, serializer):
-        post = self.get_object()
-        if post.author != self.request.user:
-            raise PermissionDenied("You can only update your own posts.")
         serializer.save()
 
 
 class JobPostDeleteView(generics.DestroyAPIView):
     queryset = JobPost.objects.all()
     serializer_class = JobPostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
+    lookup_field = 'slug'
 
     def perform_destroy(self, instance):
-        if instance.author != self.request.user:
-            raise PermissionDenied("You can only delete your own posts.")
         instance.delete()
 
 
 class HousingPostDeleteView(generics.DestroyAPIView):
     queryset = HousingPost.objects.all()
     serializer_class = HousingPostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
+    lookup_field = 'slug'
 
     def perform_destroy(self, instance):
+<<<<<<< HEAD
+        instance.delete()
+=======
         if instance.author != self.request.user:
             raise PermissionDenied("You can only delete your own posts.")
         instance.delete()
@@ -193,3 +217,4 @@ class PostTitleSearchView(generics.ListAPIView):
         job_posts = JobPost.objects.filter(title__icontains=title, is_draft=False)
         housing_posts = HousingPost.objects.filter(title__icontains=title, is_draft=False)
         return list(job_posts) + list(housing_posts)
+>>>>>>> 2fc7f24d535e507477aac04f93e488c40f13371a
