@@ -2,7 +2,6 @@ from cities_light.models import Country, Region
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
-from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 
 from .models import JobPostCategory, JobPost, HousingPostCategory, HousingPost
@@ -42,6 +41,7 @@ class JobPostViewRead(viewsets.ReadOnlyModelViewSet):
 class JobPostCategoryViewRead(viewsets.ReadOnlyModelViewSet):
     queryset = JobPostCategory.objects.all()
     serializer_class = JobPostCategorySerializer
+    pagination_class = None
 
 
 class HousingPostViewRead(viewsets.ReadOnlyModelViewSet):
@@ -53,6 +53,7 @@ class HousingPostViewRead(viewsets.ReadOnlyModelViewSet):
 class HousingPostCategoryViewRead(viewsets.ReadOnlyModelViewSet):
     queryset = HousingPostCategory.objects.all()
     serializer_class = HousingPostCategorySerializer
+    pagination_class = None
 
 
 class JobPostCreateView(generics.CreateAPIView):
@@ -118,16 +119,19 @@ class HousingPostCategoryFilterView(generics.ListAPIView):
 class LocationCountryViewList(generics.ListAPIView):
     serializer_class = LocationCountrySerializer
     queryset = Country.objects.all()
+    pagination_class = None
 
 
 class LocationRegionViewList(generics.ListAPIView):
     serializer_class = LocationRegionSerializer
     queryset = Region.objects.all()
+    pagination_class = None
 
 
 class LocationCountryRegionsViewList(generics.ListAPIView):
     serializer_class = LocationRegionSerializer
     http_method_names = ['post']
+    pagination_class = None
 
     def get_queryset(self):
         country_id = self.request.data.get('country_id')
