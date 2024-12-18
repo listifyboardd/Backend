@@ -133,6 +133,11 @@ class LocationCountryRegionsViewList(generics.ListAPIView):
     http_method_names = ['post']
     pagination_class = None
 
+    def post(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def get_queryset(self):
         country_id = self.request.data.get('country_id')
         return Region.objects.filter(country_id=country_id)
