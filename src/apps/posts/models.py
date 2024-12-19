@@ -60,6 +60,7 @@ class HousingPost(models.Model):
     main_image = models.ImageField(upload_to='housing_posts/main_images/', verbose_name='Main image')
     location = models.ForeignKey(Region, on_delete=models.CASCADE, verbose_name='Region')
     type = models.CharField(max_length=255, choices=[('for_rent', 'For rent'), ('for_business', 'For business')], verbose_name='Type')
+    price = models.CharField(max_length=255, verbose_name='Price', blank=True, null=True)
     publication_date = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(HousingPostCategory, on_delete=models.PROTECT, verbose_name='Category')
     is_draft = models.BooleanField(default=False, verbose_name='Is draft')
